@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#7c3aed" />
+    <title>E-Board — Geen verbinding</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fdfbf7;
+        color: #1e293b;
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        text-align: center;
+        padding: 24px;
+        padding-top: calc(24px + env(safe-area-inset-top));
+        padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      }
+      .card { max-width: 380px; }
+      .icon {
+        width: 96px;
+        height: 96px;
+        border-radius: 24px;
+        margin: 0 auto 24px;
+        display: block;
+        box-shadow: 0 4px 20px rgba(124, 58, 237, 0.12);
+      }
+      h1 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+      p { font-size: 15px; line-height: 1.6; color: #64748b; margin-bottom: 28px; }
+      button {
+        background: #7c3aed;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 32px;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        min-height: 48px;
+      }
+      button:active { background: #6d28d9; }
+      .brand { margin-top: 32px; font-size: 12px; letter-spacing: 0.08em; color: #94a3b8; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <img class="icon" src="./icon-192.png" alt="E-Board" />
+      <h1>Geen internetverbinding</h1>
+      <p>E-Board heeft een internetverbinding nodig om je bord, uren en klanten te laden. Controleer je verbinding en probeer het opnieuw.</p>
+      <button onclick="location.reload()">Opnieuw proberen</button>
+      <div class="brand">E-BOARD &nbsp;•&nbsp; BY ENDURA</div>
+    </div>
+  </body>
+</html>

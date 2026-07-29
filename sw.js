@@ -1,8 +1,14 @@
-const CACHE_NAME = 'e-board-v1';
+// E-Board service worker
+// Cachet ALLEEN de app-schil (html, js, css, iconen, fonts van eigen domein).
+// Alles van andere domeinen (Supabase-database, Google Fonts) gaat ALTIJD
+// rechtstreeks over het netwerk en wordt nooit gecachet — data blijft dus live.
+const CACHE_NAME = 'e-board-v2';
+const OFFLINE_URL = './offline.html';
 const STATIC_ASSETS = [
-  '/',
-  '/icon.svg',
-  '/manifest.json',
+  './',
+  './offline.html',
+  './manifest.json',
+  './icon-192.png',
 ];
 
 self.addEventListener('install', (event) => {
@@ -24,13 +30,13 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
-  // Skip non-GET and cross-origin
+  // Alleen GET; alles van andere domeinen (o.a. Supabase) blijft onaangeraakt
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Network-first for HTML navigation, cache-first for assets
   if (request.mode === 'navigate') {
+    // Pagina openen: eerst netwerk (altijd verse app), anders cache, anders offline-pagina
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -38,14 +44,17 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
           return response;
         })
-        .catch(() => caches.match(request))
+        .catch(() =>
+          caches.match(request).then((cached) => cached || caches.match(OFFLINE_URL))
+        )
     );
-  } else {
+  } else if (url.pathname.match(/\.(js|css|svg|png|jpg|woff2?)$/)) {
+    // Bestanden met vaste namen: eerst cache, anders netwerk (en dan bewaren)
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
         return fetch(request).then((response) => {
-          if (response.ok && url.pathname.match(/\.(js|css|svg|png|woff2?)$/)) {
+          if (response.ok) {
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
           }

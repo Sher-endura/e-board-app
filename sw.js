@@ -36,9 +36,11 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (request.mode === 'navigate') {
-    // Pagina openen: eerst netwerk (altijd verse app), anders cache, anders offline-pagina
+    // Pagina openen: eerst netwerk (altijd verse app), anders cache, anders offline-pagina.
+    // 'no-cache' dwingt af dat de browser de startpagina bij de server controleert,
+    // anders kan een update tot 10 minuten (GitHub Pages cache) op zich laten wachten.
     event.respondWith(
-      fetch(request)
+      fetch(request, { cache: 'no-cache' })
         .then((response) => {
           const clone = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));

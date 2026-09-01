@@ -1,0 +1,1 @@
+import{r as e}from"./vendor-Bodsf5kP.js";import{s as c}from"./index-D5uqFDdP.js";function n(){const[t,o]=e.useState([]),[r,a]=e.useState(!0),s=e.useCallback(async()=>{const{data:f}=await c.from("profiles").select("*").order("full_name");o(f??[]),a(!1)},[]);return e.useEffect(()=>{s()},[s]),{profiles:t,loading:r,refetch:s}}export{n as u};
